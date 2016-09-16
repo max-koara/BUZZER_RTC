@@ -40,12 +40,6 @@ buzzer_spec = ["implementation_id", "BUZZER",
 		 "max_instance",      "1", 
 		 "language",          "Python", 
 		 "lang_type",         "SCRIPT",
-		 "conf.default.PIN_NUMBER", "6",
-
-		 "conf.__widget__.PIN_NUMBER", "text",
-
-         "conf.__type__.PIN_NUMBER", "Short",
-
 		 ""]
 # </rtc-template>
 
@@ -85,12 +79,6 @@ class BUZZER(OpenRTM_aist.DataFlowComponentBase):
 
 		# initialize of configuration-data.
 		# <rtc-template block="init_conf_param">
-		"""
-		
-		 - Name:  BUZZERPIN
-		 - DefaultValue: 6
-		"""
-		self._BUZZERPIN = [6]
 		
 		# </rtc-template>
 
@@ -106,7 +94,6 @@ class BUZZER(OpenRTM_aist.DataFlowComponentBase):
 	#
 	def onInitialize(self):
 		# Bind variables and configuration variable
-		self.bindParameter("PIN_NUMBER", self._BUZZERPIN, "6")
 		
 		# Set InPort buffers
 		self.addInPort("Signal",self._SignalIn)

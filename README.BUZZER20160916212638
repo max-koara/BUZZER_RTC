@@ -10,7 +10,6 @@
 #   --module-desc='ModuleDescription' --module-version=1.0.0 --module-vendor=VenderName 
 #   --module-category=Category --module-comp-type=STATIC 
 #   --module-act-type=PERIODIC --module-max-inst=1 
-#   --config=PIN_NUMBER:Short:6 
 #   --inport=Signal:RTC::TimedShort 
 
 
@@ -112,15 +111,6 @@ In/Out:      InPortよりShort型で音階制御のための数値を取得す�
     Configuration definition
 ======================================================================
 # <rtc-template block="configuration">
-	Configuration:
-		Name:             PIN_NUMBER
-		Description:     
-		Type:            Short
-		DefaultValue:     6
-		Unit:            
-		Range:           
-		Constraint:      
-
 # </rtc-template> 
 
 This software is developed at the National Institute of Advanced

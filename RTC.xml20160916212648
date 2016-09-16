@@ -20,11 +20,6 @@
         <rtc:OnAction xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
         <rtc:OnModeChanged xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
     </rtc:Actions>
-    <rtc:ConfigurationSet>
-        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="BUZZERPIN" rtc:unit="" rtc:defaultValue="6" rtc:type="Short" rtc:name="PIN_NUMBER">
-            <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
-        </rtc:Configuration>
-    </rtc:ConfigurationSet>
     <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="LEFT" rtcExt:variableName="signal" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedShort" rtc:name="Signal" rtc:portType="DataInPort">
         <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="1" rtcDoc:type="Short" rtcDoc:description="FaBo製#102 Buzzerユニットは、Short型数値で周波数を変更するため、Short型でInPortよりデータを受け取り使用する。数値の上下限は131(1ド)&gt;988(3シ)とする。&lt;br/&gt;音階についてはhttp://www.fabo.io/102.htmlを参照してください"/>
     </rtc:DataPorts>
