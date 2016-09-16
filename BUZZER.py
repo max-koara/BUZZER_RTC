@@ -18,6 +18,22 @@ import RTC
 import OpenRTM_aist
 
 
+#Import GPIO module
+import RPi.GPIO as GPIO
+
+DUTY = 50 # 0 -100
+
+
+def limit_signal(data):
+	if(data > 988):
+		return 988
+	elif(data < 131):
+		return 131
+	else:
+		return data
+
+
+
 # Import Service implementation class
 # <rtc-template block="service_impl">
 
@@ -56,7 +72,7 @@ buzzer_spec = ["implementation_id", "BUZZER",
 # FaBo製#102BuzzerユニットのRaspberry-PiにおけるRTC。
 # 
 # InPortよりShort型で音階制御のための数値を取得する。数値0時のエラー回避をかね、音階を131(1ド)>
-	988(3シ)の幅に収める処理も含める
+	#988(3シ)の幅に収める処理も含める
 # 
 # 
 class BUZZER(OpenRTM_aist.DataFlowComponentBase):
@@ -71,9 +87,9 @@ class BUZZER(OpenRTM_aist.DataFlowComponentBase):
 		signal_arg = [None] * ((len(RTC._d_TimedShort) - 4) / 2)
 		self._d_signal = RTC.TimedShort(*signal_arg)
 		"""
-		FaBo製#102Buzzerユニットは、Short型数値で周波数を変更するため、Short型でInPortよりデータを受け取り使用する。数値の上下限は131(1ド)>
-		988(3シ)とする。
-		音階についてはhttp://www.fabo.io/102.htmlを参照してください
+		#FaBo製#102Buzzerユニットは、Short型数値で周波数を変更するため、Short型でInPortよりデータを受け取り使用する。数値の上下限は131(1ド)>
+		#988(3シ)とする。
+		#音階についてはhttp://www.fabo.io/102.htmlを参照してください
 		 - Type: Short
 		 - Number: 1
 		"""
@@ -93,9 +109,12 @@ class BUZZER(OpenRTM_aist.DataFlowComponentBase):
 		self._BUZZERPIN = [6]
 		
 		# </rtc-template>
+		self._buzzer = " "
 
-
-		 
+		GPIO.setwarnings(False)
+		GPIO.setmode(GPIO.BCM)
+		
+				 
 	##
 	#
 	# The initialize action (on CREATED->ALIVE transition)
@@ -108,6 +127,11 @@ class BUZZER(OpenRTM_aist.DataFlowComponentBase):
 		# Bind variables and configuration variable
 		self.bindParameter("PIN_NUMBER", self._BUZZERPIN, "6")
 		
+		#setup GPIO.OUT
+		GPIO.setup(self._BUZZERPIN[0], GPIO.OUT)
+		print"set up GPIO.OUT"
+		self._buzzer = GPIO.PWM(self._BUZZERPIN[0], 1000)
+		print " set buzzer"
 		# Set InPort buffers
 		self.addInPort("Signal",self._SignalIn)
 		
@@ -130,7 +154,8 @@ class BUZZER(OpenRTM_aist.DataFlowComponentBase):
 	
 		# 
 	def onFinalize(self):
-	
+		GPIO.cleanup()
+		print"GPIO clean up"
 		return RTC.RTC_OK
 	
 	#	##
@@ -172,7 +197,6 @@ class BUZZER(OpenRTM_aist.DataFlowComponentBase):
 		#
 		#
 	def onActivated(self, ec_id):
-	
 		return RTC.RTC_OK
 	
 		##
@@ -186,7 +210,7 @@ class BUZZER(OpenRTM_aist.DataFlowComponentBase):
 		#
 		#
 	def onDeactivated(self, ec_id):
-	
+		self._buzzer .stop()
 		return RTC.RTC_OK
 	
 		##
@@ -200,7 +224,14 @@ class BUZZER(OpenRTM_aist.DataFlowComponentBase):
 		#
 		#
 	def onExecute(self, ec_id):
-	
+		if(self._SignalIn.isNew()):
+			self._d_signal = self._SignalIn.read() 
+			data = self._d_signal.data	
+			value = limit_signal(data)
+			self._buzzer.ChangeFrequency(value)
+			self._buzzer.start(DUTY)
+
+
 		return RTC.RTC_OK
 	
 	#	##
